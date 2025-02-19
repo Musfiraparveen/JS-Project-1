@@ -119,6 +119,7 @@
         function appendToDisplay(value) {
             const display = document.getElementById('display');
             display.value += value;
+            console.log("Values",display.value);
         }
         function appendSymbol(symbol) {
             if (symbol === 'DEL') {
@@ -137,13 +138,16 @@
             const display = document.getElementById('display');
             try {
                 display.value = eval(display.value);
+                console.log(display.value);
             } catch {
                 display.value = 'Error';
+                console.log('Error');
             }
         }
         function clearDisplay() {
             const display = document.getElementById('display');
             display.value = '';
+            console.log('Cleared');
         }
     </script>
 </body>
