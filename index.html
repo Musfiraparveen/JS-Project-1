@@ -107,7 +107,7 @@
             <div class="button" onclick="appendToDisplay('2')">2</div>
             <div class="button" onclick="appendToDisplay('3')">3</div>
             <div class="button operator" onclick="appendToDisplay('+')">+</div>
-            <div class="button operator" onclick="appendToDisplay('-')">%</div>
+            <div class="button operator" onclick="appendToDisplay('%')">%</div>
             <div class="button" onclick="appendToDisplay('0')">0</div>
             <div class="button" onclick="appendToDisplay('.')">.</div>
             <div class="button equal" onclick="calculate()">=</div>
@@ -115,41 +115,70 @@
         </div>
     </div>
     <script>
-
+        let isResultDisplayed = false;
         function appendToDisplay(value) {
             const display = document.getElementById('display');
-            display.value += value;
-            console.log("Values",display.value);
-        }
-        function appendSymbol(symbol) {
-            if (symbol === 'DEL') {
-                document.getElementById('display').value = document.getElementById('display').value.slice(0, -1);
-            }
-            else if (symbol === 'EXP') {
-                document.getElementById('display').value += '**';
-            }
-            else {
-                document.getElementById('display').value += symbol;
+            if (isResultDisplayed) {
+                if (isNaN(value)) {  
+                    display.value += value;
+                    console.log("Operator pressed after result:", value);
+                } else {
+                    display.value = value;  
+                    console.log("New number entered after result, resetting display:", value);
+                }
+                isResultDisplayed = false;
+                console.log("isResultDisplayed reset to false");
             }
 
+            else {
+                if (display.value === "0" && value !== ".") {
+                    display.value = value;
+                    console.log("Screen had only 0 replacing with:", value);
+                } else {
+                    display.value += value;
+                    console.log("Appending value new display:", display.value);
+                }
+            }
+        }
+        function appendSymbol(symbol) {
+            const display = document.getElementById('display');
+
+            if (symbol === 'DEL') {
+                display.value = display.value.slice(0, -1);
+                console.log("Deleted last character, new display:", display.value);
+            }
+            else if (symbol === 'EXP') {
+                display.value += '**';
+                console.log("Added exponent symbol, new display:", display.value);
+            }
+            else {
+                display.value += symbol;
+                console.log("Added symbol, new display:", display.value);
+            }
+            isResultDisplayed = false;
         }
 
         function calculate() {
             const display = document.getElementById('display');
             try {
                 display.value = eval(display.value);
-                console.log(display.value);
+                isResultDisplayed = true;
+                console.log("Result:", display.value);
             } catch {
                 display.value = 'Error';
-                console.log('Error');
+                isResultDisplayed = true;
+                console.log("Error");
             }
         }
+
+
         function clearDisplay() {
-            const display = document.getElementById('display');
-            display.value = '';
-            console.log('Cleared');
+            document.getElementById('display').value = '';
+            isResultDisplayed = false;
+            console.log("Cleared");
         }
+
     </script>
 </body>
 
-</html>  
+</html>
